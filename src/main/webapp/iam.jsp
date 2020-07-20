@@ -59,6 +59,12 @@
                             </button>
                         </div>
                     </div>
+
+                    <div class="row justify-content-md-center">
+                        <div class="col col-sm-6">
+                            <a href="home.jsp" class="btn btn-secondary btn-lg btn-block">Volver</a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -85,7 +91,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
