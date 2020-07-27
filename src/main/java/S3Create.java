@@ -24,7 +24,6 @@ public class S3Create extends HttpServlet {
 
         String name = req.getParameter("nombre");
 
-
         try {
             crearBucket(name);
         } catch (URISyntaxException e) {
