@@ -20,7 +20,6 @@
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col col-lg-8">
-                <form method="post" action="Ec2">
                     <%
                         ArrayList<Instances> list = null;
 
@@ -39,7 +38,7 @@
                             out.write("<tr><th scope='row'>Id</th><td>"+i.getId()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Ami</th><td>"+i.getAmi()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Type</th><td>"+i.getType()+"</td></tr>\n");
-                            out.write("<tr><th scope='row'>State</th><td>"+i.getState()+"</td></tr>\n");
+                            out.write("<tr><th scope='row'>State</th><td>"+i.getState().toLowerCase()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Launch Time</th><td>"+i.getLaunchTime()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Placement</th><td>"+i.getPlacement()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Platform</th><td>"+i.getPlatgorm()+"</td></tr>\n");
@@ -51,12 +50,18 @@
                             out.write("</tbody>\n");
                             out.write("</table>\n");
                         }
-                        list.clear();
+
                     %>
-                </form>
                 <div class="row justify-content-md-center">
                     <div class="col col-sm-6">
-                        <a href="keys.jsp" class="btn btn-secondary btn-lg btn-block">Regresar</a>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+                            Iniciar/Apagar un instancia
+                        </button>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="col col-sm-6">
+                        <a href="home.jsp" class="btn btn-secondary btn-lg btn-block">Regresar</a>
                     </div>
                 </div>
             </div>

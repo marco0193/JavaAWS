@@ -45,7 +45,10 @@
                 <div class="card-body">
                     <h5 class="card-title">AWS EC2</h5>
                     <p class="card-text">¿Deseas ver las diferentes opciones que tenemos para gestiones tus instancias de EC2?</p>
-                    <a href="keys.jsp" class="btn btn-primary btn-lg active btn-lg btn-block" role="button" aria-pressed="true">Vamos</a>
+                    <form class="form-inline" method="post" action="Ec2">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Vamos</button>
+                    </form>
+                    <!-- <a href="ec2.jsp" class="btn btn-primary btn-lg active btn-lg btn-block" role="button" aria-pressed="true">Vamos</a>-->
                 </div>
             </div>
         </div>

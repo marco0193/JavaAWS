@@ -29,17 +29,16 @@ public class Ec2List extends HttpServlet {
 
         String accessKey = req.getParameter("accessKay");
         String secretKay = req.getParameter("aecretKay");
-        BasicAWSCredentials awsCreds = null;
-        Credentials credentials = null;
+        listInstances.clear();
+        //BasicAWSCredentials awsCreds = null;
+        //Credentials credentials = null;
 
-        if (accessKey != null && secretKay != null) {
+        /*if (accessKey != null && secretKay != null) {
             credentials = new Credentials(accessKey, secretKay);
             awsCreds = new BasicAWSCredentials(credentials.getAccessKey(), credentials.getSecretKey());
-        }else{
-            awsCreds = new BasicAWSCredentials(credentials.getAccessKey(), credentials.getSecretKey());
-        }
+        }*/
 
-        //BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
 
         /*final AmazonEC2 ec2 = AmazonEC2Client.builder()
                 .withRegion(Regions.US_EAST_1)
