@@ -2,27 +2,27 @@ package Interfaces;
 
 public class Instances {
     private String id;
+    private String name;
     private String ami;
     private String type;
     private String state;
     private String launchTime;
     private String placement;
     private String platgorm;
-    private String tags;
     private String vpcId;
     private String karnelId;
     private String privateDns;
     private String publicDns;
 
-    public Instances(String id, String ami, String type, String state, String launchTime, String placement, String platgorm, String tags, String vpcId, String karnelId, String privateDns, String publicDns) {
+    public Instances(String id, String name, String ami, String type, String state, String launchTime, String placement, String platgorm, String vpcId, String karnelId, String privateDns, String publicDns) {
         this.id = id;
+        this.name = name;
         this.ami = ami;
         this.type = type;
         this.state = state;
         this.launchTime = launchTime;
         this.placement = placement;
         this.platgorm = platgorm;
-        this.tags = tags;
         this.vpcId = vpcId;
         this.karnelId = karnelId;
         this.privateDns = privateDns;
@@ -35,6 +35,14 @@ public class Instances {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAmi() {
@@ -83,14 +91,6 @@ public class Instances {
 
     public void setPlatgorm(String platgorm) {
         this.platgorm = platgorm;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
     }
 
     public String getVpcId() {

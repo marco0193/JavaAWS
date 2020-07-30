@@ -6,10 +6,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
-import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
-import com.amazonaws.services.ec2.model.DescribeInstancesResult;
-import com.amazonaws.services.ec2.model.Instance;
-import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.*;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import javax.servlet.ServletException;
@@ -27,16 +24,10 @@ public class Ec2List extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String accessKey = req.getParameter("accessKay");
-        String secretKay = req.getParameter("aecretKay");
+        //String accessKey = req.getParameter("accessKay");
+        //String secretKay = req.getParameter("aecretKay");
+        String idInsrance = req.getParameter("select");
         listInstances.clear();
-        //BasicAWSCredentials awsCreds = null;
-        //Credentials credentials = null;
-
-        /*if (accessKey != null && secretKay != null) {
-            credentials = new Credentials(accessKey, secretKay);
-            awsCreds = new BasicAWSCredentials(credentials.getAccessKey(), credentials.getSecretKey());
-        }*/
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
 
@@ -46,6 +37,30 @@ public class Ec2List extends HttpServlet {
                 .build();*/
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
 
+        //Llamamos al metodo que se encarga de crear la lista de instancias
+        listEc2(ec2);
+
+        //Comprobamos que el valor idInstance este lleno
+        if(idInsrance != null){
+            for (Instances i : listInstances){
+                if(i.getId().equals(idInsrance)){
+                    //running or stopped
+                    String state = i.getState().toLowerCase();
+
+                    //Llamamos al metodo que se encarga de iniciar o parar la instancia
+                    onOffInstance(ec2, idInsrance, state);
+                }
+            }
+        }
+
+        //Cerramos el cliente de Amazon Ec2
+        ec2.shutdown();
+
+        req.setAttribute("listInstances", listInstances);
+        getServletConfig().getServletContext().getRequestDispatcher("/ec2.jsp").forward(req, resp);
+    }
+
+    public void listEc2(AmazonEC2Client ec2){
         boolean done = false;
 
         DescribeInstancesRequest request = new DescribeInstancesRequest();
@@ -55,7 +70,19 @@ public class Ec2List extends HttpServlet {
 
             for(Reservation reservation:response.getReservations()){
                 for (Instance instance : reservation.getInstances()){
-                    Instances instances = new Instances(instance.getInstanceId(), instance.getImageId(), instance.getInstanceType(), instance.getState().getName(), instance.getLaunchTime().toString(), instance.getPlacement().getAvailabilityZone(), instance.getPlatform(), instance.getTags().toString(), instance.getVpcId(), instance.getKernelId(), instance.getPrivateDnsName(), instance.getPublicDnsName());
+                    Instances instances = new Instances(instance.getInstanceId(),
+                            instance.getTags().get(0).getValue(),
+                            instance.getImageId(),
+                            instance.getInstanceType(),
+                            instance.getState().getName(),
+                            instance.getLaunchTime().toString(),
+                            instance.getPlacement().getAvailabilityZone(),
+                            instance.getPlatform(),
+                            instance.getVpcId(),
+                            instance.getKernelId(),
+                            instance.getPrivateDnsName(),
+                            instance.getPublicDnsName());
+
                     listInstances.add(instances);
                 }
 
@@ -66,8 +93,15 @@ public class Ec2List extends HttpServlet {
                 }
             }
         }
+    }
 
-        req.setAttribute("listInstances", listInstances);
-        getServletConfig().getServletContext().getRequestDispatcher("/ec2.jsp").forward(req, resp);
+    public void onOffInstance(AmazonEC2Client ec2, String idInstance, String state){
+        if(state.equals("stopped")){
+            StartInstancesRequest request = new StartInstancesRequest().withInstanceIds(idInstance);
+            ec2.startInstances(request);
+        }else if (state.equals("running")){
+            StopInstancesRequest request = new StopInstancesRequest().withInstanceIds(idInstance);
+            ec2.stopInstances(request);
+        }
     }
 }
