@@ -48,6 +48,7 @@
                             out.write("<tr><th scope='row'>Karnel Id</th><td>"+i.getKarnelId()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Private DNS</th><td>"+i.getPrivateDns()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Public DNS</th><td>"+i.getPublicDns()+"</td></tr>\n");
+                            out.write("<tr><th scope='row'>Exportar</th><td><form method='get' action='ReporteGeneral'><input type='hidden' id='fname' name='fname' value='"+i.getId()+"'><button type='submit' class='btn btn-warning'>Exportar</button></form></td></tr>\n");
                             out.write("</tbody>\n");
                             out.write("</table>\n");
                         }
@@ -67,6 +68,11 @@
                 </div>
 
                 <div class="row justify-content-md-center">
+                    <div class="col col-sm-6">
+                    <form method="get" action="ReporteGeneral">
+                        <button type="submit" class="btn btn-warning btn-lg btn-block">Descargar Reporte General</button>
+                    </form>
+                    </div>
                     <div class="col col-sm-6">
                         <a href="home.jsp" class="btn btn-secondary btn-lg btn-block">Regresar</a>
                     </div>
