@@ -1,4 +1,5 @@
 <%@ page import="Interfaces.Instances" %>
+<%@ page import="Interfaces.Credentials" %>
 <%@ page import="java.util.ArrayList" %>
 <%--
   Created by IntelliJ IDEA.
@@ -23,10 +24,15 @@
             <div class="col col-lg-8">
                     <%
                         ArrayList<Instances> list = null;
+                        ArrayList<Credentials> listCred = null;
 
                         if (request.getAttribute("listInstances") != null){
                             list = (ArrayList<Instances>)request.getAttribute("listInstances");
+                            listCred = (ArrayList<Credentials>)request.getAttribute("listCred");
                         }
+
+                        String accesskey = listCred.get(0).getAccessKey();
+                        String secretkey = listCred.get(0).getSecretKey();
 
                         for (Instances i : list){
                             out.write("<table class='table'>\n ");
@@ -48,7 +54,12 @@
                             out.write("<tr><th scope='row'>Karnel Id</th><td>"+i.getKarnelId()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Private DNS</th><td>"+i.getPrivateDns()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Public DNS</th><td>"+i.getPublicDns()+"</td></tr>\n");
-                            out.write("<tr><th scope='row'>Exportar</th><td><form method='get' action='ReporteGeneral'><input type='hidden' id='fname' name='fname' value='"+i.getId()+"'><button type='submit' class='btn btn-warning'>Exportar</button></form></td></tr>\n");
+                            out.write("<tr><th scope='row'>Exportar</th><td><form method='get' action='ReporteIndividual'>"+
+                            "<input type='hidden' id='fname' name='fname' value='"+i.getId()+"'>"+
+                            "<input type='hidden' id='faccess' name='faccess' value='"+accesskey+"'>"+
+                            "<input type='hidden' id='fsecret' name='fsecret' value='"+secretkey+"'>"+
+                            "<button type='submit' class='btn btn-warning'>Exportar</button>"+
+                            "</form></td></tr>\n");
                             out.write("</tbody>\n");
                             out.write("</table>\n");
                         }
@@ -70,6 +81,8 @@
                 <div class="row justify-content-md-center">
                     <div class="col col-sm-6">
                     <form method="get" action="ReporteGeneral">
+                        <input type="hidden" id="faccess" name="faccess" value=<%= accesskey %>>
+                        <input type="hidden" id="fsecret" name="fsecret" value=<%= secretkey %>>
                         <button type="submit" class="btn btn-warning btn-lg btn-block">Descargar Reporte General</button>
                     </form>
                     </div>

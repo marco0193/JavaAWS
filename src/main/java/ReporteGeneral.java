@@ -1,3 +1,4 @@
+import Interfaces.Credentials;
 import Interfaces.Instances;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class ReporteGeneral extends HttpServlet {
 
     public static ArrayList<Instances> listInstances = new ArrayList<>();
+    public static ArrayList<Credentials> listCredentials = new ArrayList<>();
 
     /*public ReporteGeneral(){
         super();
@@ -27,13 +29,15 @@ public class ReporteGeneral extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String access = req.getParameter("faccess");
+        String secret = req.getParameter("fsecret");
+
         resp.setContentType("application/vnd.ms-excel");
-        //resp.setHeader("content-type", "text/csv");
         resp.setHeader("Content-disposition", "attachment;filename=Reporte.xls");
 
         listInstances.clear();
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(access, secret);
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
 
         //Llamamos al metodo que se encarga de crear la lista de instancias
@@ -59,6 +63,11 @@ public class ReporteGeneral extends HttpServlet {
                 out.println("Public DNS\t"+i.getPublicDns());
                 out.println(" \t ");
                 out.println(" \t ");
+                out.println("Este es el:\treporte general");
+                out.println(" \t ");
+                out.println(" \t ");
+                out.println("Access key\tsecretkey");
+                out.println(access+"\t"+secret);
             }
         }finally{
             out.close();

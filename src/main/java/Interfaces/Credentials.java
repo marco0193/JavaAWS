@@ -9,9 +9,6 @@ public class Credentials {
         SecretKey = secretKey;
     }
 
-    public Credentials() {
-    }
-
     public String getAccessKey() {
         return AccessKey;
     }

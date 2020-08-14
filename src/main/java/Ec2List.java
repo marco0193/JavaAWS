@@ -20,16 +20,32 @@ import java.util.ArrayList;
 @WebServlet("/Ec2")
 public class Ec2List extends HttpServlet {
     public static ArrayList<Instances> listInstances = new ArrayList<>();
+    public static ArrayList<Credentials> listCredentials = new ArrayList<>();
+    BasicAWSCredentials awsCreds = null;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        //String accessKey = req.getParameter("accessKay");
-        //String secretKay = req.getParameter("aecretKay");
+        String accessKey = req.getParameter("accessKay");
+        String secretKay = req.getParameter("aecretKay");
         String idInsrance = req.getParameter("select");
         listInstances.clear();
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
+        if(accessKey != null && secretKay != null){
+            listCredentials.clear();
+        }
+
+        /*for(Credentials c : listCredentials){
+            //agregamos la nueva access kay a la lista
+            if(accessKey != c.getAccessKey() && secretKay != c.getSecretKey()){
+
+            }
+        }*/
+
+        Credentials credentials = new Credentials(accessKey, secretKay);
+        listCredentials.add(credentials);
+
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(listCredentials.get(0).getAccessKey(),listCredentials.get(0).getSecretKey());
 
         /*final AmazonEC2 ec2 = AmazonEC2Client.builder()
                 .withRegion(Regions.US_EAST_1)
@@ -57,6 +73,8 @@ public class Ec2List extends HttpServlet {
         ec2.shutdown();
 
         req.setAttribute("listInstances", listInstances);
+        req.setAttribute("listCred", listCredentials);
+        //req.setAttribute("secretKey", secretKay);
         getServletConfig().getServletContext().getRequestDispatcher("/ec2.jsp").forward(req, resp);
     }
 

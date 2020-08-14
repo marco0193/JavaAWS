@@ -24,12 +24,16 @@ public class ReporteEspecifico extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idInstance = req.getParameter("fname");
 
+        String access = req.getParameter("faccess");
+        String secret = req.getParameter("fsecret");
+
+
         resp.setContentType("application/vnd.ms-excel");
         resp.setHeader("Content-disposition", "attachment;filename=ReporteGeneral.xls");
 
         listInstances.clear();
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(CredentialsEc2.access_key_id, CredentialsEc2.secret_access_key);
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(access, secret);
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
 
         listEc2(ec2);
@@ -54,6 +58,11 @@ public class ReporteEspecifico extends HttpServlet{
                     out.println("Public DNS\t"+i.getPublicDns());
                     out.println(" \t ");
                     out.println(" \t ");
+                    out.println("Este es el:\treporte individual");
+                    out.println(" \t ");
+                    out.println(" \t ");
+                    out.println("Access key\tsecretkey");
+                    out.println(access+"\t"+secret);
                 }
             }
 
