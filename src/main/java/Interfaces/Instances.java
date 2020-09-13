@@ -12,9 +12,8 @@ public class Instances {
     private String vpcId;
     private String karnelId;
     private String privateDns;
-    private String publicDns;
 
-    public Instances(String id, String name, String ami, String type, String state, String launchTime, String placement, String platgorm, String vpcId, String karnelId, String privateDns, String publicDns) {
+    public Instances(String id, String name, String ami, String type, String state, String launchTime, String placement, String platgorm, String vpcId, String karnelId, String privateDns) {
         this.id = id;
         this.name = name;
         this.ami = ami;
@@ -26,7 +25,6 @@ public class Instances {
         this.vpcId = vpcId;
         this.karnelId = karnelId;
         this.privateDns = privateDns;
-        this.publicDns = publicDns;
     }
 
     public String getId() {
@@ -117,11 +115,4 @@ public class Instances {
         this.privateDns = privateDns;
     }
 
-    public String getPublicDns() {
-        return publicDns;
-    }
-
-    public void setPublicDns(String publicDns) {
-        this.publicDns = publicDns;
-    }
 }

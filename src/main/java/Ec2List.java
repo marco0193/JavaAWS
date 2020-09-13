@@ -98,8 +98,7 @@ public class Ec2List extends HttpServlet {
                             instance.getPlatform(),
                             instance.getVpcId(),
                             instance.getKernelId(),
-                            instance.getPrivateDnsName(),
-                            instance.getPublicDnsName());
+                            instance.getPrivateDnsName());
 
                     listInstances.add(instances);
                 }

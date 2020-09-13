@@ -18,7 +18,7 @@
 <body>
 <div class="container">
     <div class="row justify-content-md-center">
-        <form method="post" action="Ec2" class="col col-lg-6">
+        <form method="post" action="Ec2NewGrid" class="col col-lg-6">
             <div class="form-group">
                 <h2>Introduce los Datos</h2>
             </div>

@@ -33,7 +33,7 @@ public class ReporteGeneral extends HttpServlet {
         String secret = req.getParameter("fsecret");
 
         resp.setContentType("application/vnd.ms-excel");
-        resp.setHeader("Content-disposition", "attachment;filename=Reporte.xls");
+        resp.setHeader("Content-disposition", "attachment;filename=ReporteGeneral.xls");
 
         listInstances.clear();
 
@@ -60,7 +60,6 @@ public class ReporteGeneral extends HttpServlet {
                 out.println("VPC ID\t"+i.getVpcId());
                 out.println("Karnel ID\t"+i.getKarnelId());
                 out.println("Private DNS\t"+i.getPrivateDns());
-                out.println("Public DNS\t"+i.getPublicDns());
                 out.println(" \t ");
                 out.println(" \t ");
                 out.println("Este es el:\treporte general");
@@ -94,8 +93,7 @@ public class ReporteGeneral extends HttpServlet {
                             instance.getPlatform(),
                             instance.getVpcId(),
                             instance.getKernelId(),
-                            instance.getPrivateDnsName(),
-                            instance.getPublicDnsName());
+                            instance.getPrivateDnsName());
 
                     listInstances.add(instances);
                 }

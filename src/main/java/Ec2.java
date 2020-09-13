@@ -1,3 +1,4 @@
+import Interfaces.Credentials;
 import Interfaces.Instances;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -13,63 +14,59 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
-@WebServlet("/ReporteIndividual")
-public class ReporteEspecifico extends HttpServlet{
+@WebServlet("/Ec2NewGrid")
+public class Ec2 extends HttpServlet {
     public static ArrayList<Instances> listInstances = new ArrayList<>();
+    public static ArrayList<Credentials> listCredentials = new ArrayList<>();
+    BasicAWSCredentials awsCreds = null;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idInstance = req.getParameter("fname");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String access = req.getParameter("faccess");
-        String secret = req.getParameter("fsecret");
-
-
-        resp.setContentType("application/vnd.ms-excel");
-        resp.setHeader("Content-disposition", "attachment;filename=Reporte.xls");
-
+        String accessKey = req.getParameter("accessKay");
+        String secretKay = req.getParameter("aecretKay");
+        String idInsrance = req.getParameter("select");
         listInstances.clear();
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(access, secret);
+        if(accessKey != null && secretKay != null){
+            listCredentials.clear();
+        }
+
+        /*for(Credentials c : listCredentials){
+            //agregamos la nueva access kay a la lista
+            if(accessKey != c.getAccessKey() && secretKay != c.getSecretKey()){
+
+            }
+        }*/
+
+        Credentials credentials = new Credentials(accessKey, secretKay);
+        listCredentials.add(credentials);
+
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(listCredentials.get(0).getAccessKey(),listCredentials.get(0).getSecretKey());
+
+        /*final AmazonEC2 ec2 = AmazonEC2Client.builder()
+                .withRegion(Regions.US_EAST_1)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .build();*/
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
 
+        //Llamamos al metodo que se encarga de crear la lista de instancias
         listEc2(ec2);
 
-        PrintWriter out = resp.getWriter();
-        try{
-            for(Instances i : listInstances){
-                if(idInstance.equals(i.getId())){
-                    out.println("Intance:\t"+i.getName());
-                    out.println(" \t ");
-                    out.println("Name\tValue");
-                    out.println("Id\t"+i.getId());
-                    out.println("AMI\t"+i.getAmi());
-                    out.println("Type\t"+i.getType());
-                    out.println("State\t"+i.getState());
-                    out.println("Launch Time\t"+i.getLaunchTime());
-                    out.println("Placement\t"+i.getPlacement());
-                    out.println("Platform\t"+i.getPlatgorm());
-                    out.println("VPC ID\t"+i.getVpcId());
-                    out.println("Karnel ID\t"+i.getKarnelId());
-                    out.println("Private DNS\t"+i.getPrivateDns());
-                    out.println(" \t ");
-                    out.println(" \t ");
-                    out.println("Este es el:\treporte individual");
-                    out.println(" \t ");
-                    out.println(" \t ");
-                    out.println("Access key\tsecretkey");
-                    out.println(access+"\t"+secret);
-                }
-            }
 
-        }finally{
-            out.close();
-        }
+
+        //Cerramos el cliente de Amazon Ec2
+        ec2.shutdown();
+
+        req.setAttribute("listInstances", listInstances);
+        req.setAttribute("listCred", listCredentials);
+        //req.setAttribute("secretKey", secretKay);
+        getServletConfig().getServletContext().getRequestDispatcher("/ec2NewGrid.jsp").forward(req, resp);
     }
 
+    //Se encarga de crear el listado de intancias
     public void listEc2(AmazonEC2Client ec2){
         boolean done = false;
 

@@ -17,6 +17,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/756f11e8ba.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
@@ -53,7 +54,6 @@
                             out.write("<tr><th scope='row'>VPC Id</th><td>"+i.getVpcId()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Karnel Id</th><td>"+i.getKarnelId()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Private DNS</th><td>"+i.getPrivateDns()+"</td></tr>\n");
-                            out.write("<tr><th scope='row'>Public DNS</th><td>"+i.getPublicDns()+"</td></tr>\n");
                             out.write("<tr><th scope='row'>Exportar</th><td><form method='get' action='ReporteIndividual'>"+
                             "<input type='hidden' id='fname' name='fname' value='"+i.getId()+"'>"+
                             "<input type='hidden' id='faccess' name='faccess' value='"+accesskey+"'>"+
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col col-sm-6">
                         <form method="post" action="Ec2">
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">Actualizar</button>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fas fa-sync-alt"></i></button>
                         </form>
                     </div>
                 </div>
