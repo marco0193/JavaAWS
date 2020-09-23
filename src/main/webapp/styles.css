@@ -1,0 +1,20 @@
+.radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+
+    border: 2px solid #999;
+    transition: 0.2s all linear;
+    margin-right: 5px;
+
+    position: relative;
+    top: 4px;
+}
+
+.radio:checked {
+    border: 8px solid #194be0;
+}

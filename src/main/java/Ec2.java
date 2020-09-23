@@ -3,10 +3,7 @@ import Interfaces.Instances;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2Client;
-import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
-import com.amazonaws.services.ec2.model.DescribeInstancesResult;
-import com.amazonaws.services.ec2.model.Instance;
-import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,35 +24,47 @@ public class Ec2 extends HttpServlet {
 
         String accessKey = req.getParameter("accessKay");
         String secretKay = req.getParameter("aecretKay");
-        String idInsrance = req.getParameter("select");
+        String idIns = req.getParameter("option");
+
+        //Evento apagar o encender instancia
+        String inputPrender = req.getParameter("evento_prender");
+        String inputApagar = req.getParameter("evento_apagar");
+
+
+        //String idInsrance = req.getParameter("select");
         listInstances.clear();
 
         if(accessKey != null && secretKay != null){
             listCredentials.clear();
         }
 
-        /*for(Credentials c : listCredentials){
-            //agregamos la nueva access kay a la lista
-            if(accessKey != c.getAccessKey() && secretKay != c.getSecretKey()){
-
-            }
-        }*/
-
         Credentials credentials = new Credentials(accessKey, secretKay);
         listCredentials.add(credentials);
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(listCredentials.get(0).getAccessKey(),listCredentials.get(0).getSecretKey());
 
-        /*final AmazonEC2 ec2 = AmazonEC2Client.builder()
-                .withRegion(Regions.US_EAST_1)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .build();*/
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
 
         //Llamamos al metodo que se encarga de crear la lista de instancias
         listEc2(ec2);
 
+        //llamamos al metodo para prender la instancia
+        if(inputPrender != null) {
+            if(idIns != null){
+                StartInstancesRequest request = new StartInstancesRequest().withInstanceIds(idIns);
+                ec2.startInstances(request);
+                //onOffInstance(ec2, idInstanceOffOn);
 
+            }
+        }
+
+        //llamamos al metodo para apagar la instancia
+        if(inputApagar != null) {
+            if(idIns != null){
+                StopInstancesRequest request = new StopInstancesRequest().withInstanceIds(idIns);
+                ec2.stopInstances(request);
+            }
+        }
 
         //Cerramos el cliente de Amazon Ec2
         ec2.shutdown();
@@ -96,6 +105,20 @@ public class Ec2 extends HttpServlet {
 
                 if(response.getNextToken() == null){
                     done = true;
+                }
+            }
+        }
+    }
+
+    public void onOffInstance(AmazonEC2Client ec2, String idInstance){
+        for(Instances instace : listInstances){
+            if(idInstance.equals(instace.getId())){
+                if(instace.getState().equals("stopped")){
+                    StartInstancesRequest request = new StartInstancesRequest().withInstanceIds(idInstance);
+                    ec2.startInstances(request);
+                }else if (instace.getState().equals("running")){
+                    StopInstancesRequest request = new StopInstancesRequest().withInstanceIds(idInstance);
+                    ec2.stopInstances(request);
                 }
             }
         }
