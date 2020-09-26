@@ -24,6 +24,7 @@
                     <form class="form-inline" method="post" action="S3List">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">Vamos</button>
                     </form>
+                    <!-- <a href="tableTest.jsp" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a> -->
                 </div>
             </div>
         </div>

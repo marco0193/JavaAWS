@@ -5,6 +5,12 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.*;
 
+//Importaciones para el uso de alias
+
+import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient;
+import com.amazonaws.services.identitymanagement.model.ListAccountAliasesResult;
+import com.amazonaws.services.identitymanagement.model.AmazonIdentityManagementException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +23,9 @@ import java.util.ArrayList;
 public class Ec2 extends HttpServlet {
     public static ArrayList<Instances> listInstances = new ArrayList<>();
     public static ArrayList<Credentials> listCredentials = new ArrayList<>();
-    BasicAWSCredentials awsCreds = null;
+
+    //Valor de alias de la cuenta
+    public String aliasGeneral = "";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,7 +37,6 @@ public class Ec2 extends HttpServlet {
         //Evento apagar o encender instancia
         String inputPrender = req.getParameter("evento_prender");
         String inputApagar = req.getParameter("evento_apagar");
-
 
         //String idInsrance = req.getParameter("select");
         listInstances.clear();
@@ -44,9 +51,13 @@ public class Ec2 extends HttpServlet {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(listCredentials.get(0).getAccessKey(),listCredentials.get(0).getSecretKey());
 
         AmazonEC2Client ec2 = new AmazonEC2Client(awsCreds).withRegion(Regions.US_EAST_1);
+        AmazonIdentityManagementClient iam = new AmazonIdentityManagementClient(awsCreds);
 
         //Llamamos al metodo que se encarga de crear la lista de instancias
         listEc2(ec2);
+
+        //Llamamos al metodo que se encarga
+        getAlias(iam);
 
         //llamamos al metodo para prender la instancia
         if(inputPrender != null) {
@@ -71,8 +82,10 @@ public class Ec2 extends HttpServlet {
 
         req.setAttribute("listInstances", listInstances);
         req.setAttribute("listCred", listCredentials);
-        //req.setAttribute("secretKey", secretKay);
+        req.setAttribute("alias", aliasGeneral);
+
         getServletConfig().getServletContext().getRequestDispatcher("/ec2NewGrid.jsp").forward(req, resp);
+        //getServletConfig().getServletContext().getRequestDispatcher("/ec2List.jsp").forward(req, resp);
     }
 
     //Se encarga de crear el listado de intancias
@@ -110,7 +123,19 @@ public class Ec2 extends HttpServlet {
         }
     }
 
-    public void onOffInstance(AmazonEC2Client ec2, String idInstance){
+    public void getAlias(AmazonIdentityManagementClient iam){
+        try {
+            ListAccountAliasesResult response = iam.listAccountAliases();
+
+            for(String alias : response.getAccountAliases()){
+                aliasGeneral = alias;
+            }
+        }catch (AmazonIdentityManagementException e){
+            aliasGeneral = "SIN ALIAS";
+        }
+    }
+
+    /*public void onOffInstance(AmazonEC2Client ec2, String idInstance){
         for(Instances instace : listInstances){
             if(idInstance.equals(instace.getId())){
                 if(instace.getState().equals("stopped")){
@@ -122,5 +147,5 @@ public class Ec2 extends HttpServlet {
                 }
             }
         }
-    }
+    }*/
 }

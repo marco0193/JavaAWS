@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class index extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession sesion = req.getSession();
         String userName = req.getParameter("user");
         String password = req.getParameter("password");
 
@@ -39,14 +41,15 @@ public class index extends HttpServlet {
             ListUsersResult response = iam.listUsers(request);
 
             for(User user : response.getUsers()) {
-                if(userName.equals(user.getUserName()) && password.equals("test321")) {
+                if(userName.equals(user.getUserName()) && password.equals("test321") && sesion.getAttribute("usuario") == null) {
                     iam.shutdown();
+                    //sesion.setAttribute("usuario", userName);
+                    //resp.sendRedirect("home.jsp");
                     RequestDispatcher dd = req.getRequestDispatcher("home.jsp");
                     dd.forward(req, resp);
                 }
             }
 
-            request.setMarker(response.getMarker());
             if(!response.getIsTruncated()) {
                 done = true;
                 iam.shutdown();

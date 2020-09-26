@@ -47,9 +47,8 @@ public class ReporteGeneral extends HttpServlet {
 
         try{
             for(Instances i : listInstances){
-                out.println("Intance:\t"+i.getName());
+                out.println("Intance Name:\t"+i.getName());
                 out.println(" \t ");
-                out.println("Name\tValue");
                 out.println("Id\t"+i.getId());
                 out.println("AMI\t"+i.getAmi());
                 out.println("Type\t"+i.getType());
@@ -65,8 +64,8 @@ public class ReporteGeneral extends HttpServlet {
                 out.println("Este es el:\treporte general");
                 out.println(" \t ");
                 out.println(" \t ");
-                out.println("Access key\tsecretkey");
-                out.println(access+"\t"+secret);
+                //out.println("Access key\tsecretkey");
+                //out.println(access+"\t"+secret);
             }
         }finally{
             out.close();

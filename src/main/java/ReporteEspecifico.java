@@ -42,9 +42,8 @@ public class ReporteEspecifico extends HttpServlet{
         try{
             for(Instances i : listInstances){
                 if(idInstance.equals(i.getId())){
-                    out.println("Intance:\t"+i.getName());
+                    out.println("Intance Name:\t"+i.getName());
                     out.println(" \t ");
-                    out.println("Name\tValue");
                     out.println("Id\t"+i.getId());
                     out.println("AMI\t"+i.getAmi());
                     out.println("Type\t"+i.getType());
@@ -60,8 +59,8 @@ public class ReporteEspecifico extends HttpServlet{
                     out.println("Este es el:\treporte individual");
                     out.println(" \t ");
                     out.println(" \t ");
-                    out.println("Access key\tsecretkey");
-                    out.println(access+"\t"+secret);
+                    //out.println("Access key\tsecretkey");
+                    //out.println(access+"\t"+secret);
                 }
             }
 
